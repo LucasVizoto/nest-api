@@ -61,3 +61,7 @@ anotacoes.txt
 # Prisma
 /generated/prisma
 data
+
+# Security
+jwtRS256.key
+jwtRS256.key.pub
