@@ -1,11 +1,9 @@
-import { JwtAuthGuard } from "@/infra/auth/jwt-auth.guard";
 import {
   BadRequestException,
   Body,
   Controller,
   HttpCode,
   Post,
-  UseGuards,
 } from "@nestjs/common";
 
 import z from "zod";
@@ -24,7 +22,6 @@ const bodyValidationPipe = new ZodValidationPipe(createQuestiontBodySchema);
 type CreateQuestiontBodySchema = z.infer<typeof createQuestiontBodySchema>;
 
 @Controller("/questions")
-@UseGuards(JwtAuthGuard)
 export class CreateQuestionController {
   constructor(private createQuestion: CreateQuestionUseCase) {}
 

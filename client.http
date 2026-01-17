@@ -1,5 +1,6 @@
 @baseUrl = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
+@randomEmail = {{$randomInt 2 300000}}@email.com
 
 # @name create_account
 POST {{baseUrl}}/accounts
@@ -7,7 +8,7 @@ Content-Type: application/json
 
 {
   "name": "John Doe",
-  "email": "john.doe@example.com",
+  "email": "{{randomEmail}}",
   "password": "123456"
 }
 
@@ -28,7 +29,7 @@ Content-Type: application/json
 Authorization: Bearer {{authToken}}
 
 {
-  "title": "Testing slug",
+  "title": "Testin",
   "content": "Conteúdo da nova pergunta"
 }
 
