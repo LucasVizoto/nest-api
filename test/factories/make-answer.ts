@@ -5,9 +5,12 @@ import {
   Answer,
   type AnswerProps,
 } from "@/domain/forum/enterprise/entities/answer.js";
+import { Injectable } from "@nestjs/common";
+import { PrismaService } from "@/infra/database/prisma/prisma.service";
+import { PrismaAnswerMapper } from "@/infra/database/prisma/mappers/prisma-answer-mapper";
 
 export function makeAnswer(
-  override: Partial<AnswerProps> = {}, // pode receber qualquer propriedade de questionprop mas sendo todas opcionais
+  override: Partial<AnswerProps> = {}, // pode receber qualquer propriedade de answerprop mas sendo todas opcionais
   id?: UniqueEntityId,
 ) {
   const newAnswer = Answer.create(
@@ -21,4 +24,19 @@ export function makeAnswer(
   );
 
   return newAnswer;
+}
+
+@Injectable()
+export class AnswerFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaAnswer(data: Partial<AnswerProps> = {}): Promise<Answer> {
+    const answer = makeAnswer(data);
+
+    await this.prisma.answer.create({
+      data: PrismaAnswerMapper.toPrisma(answer),
+    });
+
+    return answer;
+  }
 }
