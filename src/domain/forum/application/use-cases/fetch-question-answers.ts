@@ -1,6 +1,7 @@
-import type { AnswerRepository } from "../repositories/answers-repository.js";
-import type { Answer } from "../../enterprise/entities/answer.js";
+import { AnswerRepository } from "../repositories/answers-repository.js";
+import { Answer } from "../../enterprise/entities/answer.js";
 import { right, type Either } from "@/core/either.js";
+import { Injectable } from "@nestjs/common";
 
 interface FetchQuestionAnswersUseCaseRequest {
   questionId: string;
@@ -13,6 +14,7 @@ type FetchQuestionAnswersUseCaseResponse = Either<
   }
 >;
 
+@Injectable()
 export class FetchQuestionAnswersUseCase {
   constructor(private answersRepository: AnswerRepository) {}
 
