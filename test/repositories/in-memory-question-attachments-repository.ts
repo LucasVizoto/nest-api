@@ -1,8 +1,18 @@
-import type { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments=repository.js";
+import type { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository.js";
 import type { QuestionAttachment } from "@/domain/forum/enterprise/entities/question-attachment.js";
 
 export class InMemoryQuestionAttachmentsRepository implements QuestionAttachmentsRepository {
   public items: QuestionAttachment[] = [];
+
+  async createMany(attachments: QuestionAttachment[]): Promise<void> {
+    this.items.push(...attachments);
+  }
+
+  async deleteMany(attachments: QuestionAttachment[]): Promise<void> {
+    this.items = this.items.filter((item) => {
+      return !attachments.some((attachment) => attachment.equals(item));
+    });
+  }
 
   async findManyByQuestionId(questionId: string) {
     const questionAttachments = this.items.filter(

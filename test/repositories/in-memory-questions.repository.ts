@@ -1,6 +1,6 @@
 import { DomainEvents } from "@/core/events/domain-events.js";
 import type { PaginationParams } from "@/core/repositories/pagination-params.js";
-import type { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments=repository.js";
+import type { QuestionAttachmentsRepository } from "@/domain/forum/application/repositories/question-attachments-repository.js";
 import type { QuestionRepository } from "@/domain/forum/application/repositories/questions-repository.js";
 import type { Question } from "@/domain/forum/enterprise/entities/question.js";
 
@@ -41,12 +41,24 @@ export class InMemoryQuestionsRepository implements QuestionRepository {
 
   async create(question: Question) {
     this.items.push(question);
+    this.questionAttachmentsRepository.createMany(
+      question.attachments.getItems(),
+    );
     DomainEvents.dispatchEventsForAggregate(question.id);
   }
 
   async save(question: Question) {
     const itemIndex = this.items.findIndex((item) => item.id === question.id);
+
     this.items[itemIndex] = question;
+
+    this.questionAttachmentsRepository.createMany(
+      question.attachments.getNewItems(),
+    );
+
+    this.questionAttachmentsRepository.deleteMany(
+      question.attachments.getRemovedItems(),
+    );
 
     DomainEvents.dispatchEventsForAggregate(question.id);
   }
