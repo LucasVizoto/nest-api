@@ -41,7 +41,7 @@ describe("Create Question", () => {
     ]);
   });
 
-  it("should persist attachmens when creating a new questio", async () => {
+  it("should persist attachmens when creating a new question", async () => {
     const result = await sut.execute({
       authorId: "1",
       title: "Nova Pergunta",
@@ -50,7 +50,7 @@ describe("Create Question", () => {
     });
 
     expect(result.isRight()).toBe(true);
-    expect(inMemoryQuestionsRepository.items[0]).toHaveLength(2);
+    expect(inMemoryQuestionAttachmentRepository.items).toHaveLength(2);
     expect(inMemoryQuestionAttachmentRepository.items).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
