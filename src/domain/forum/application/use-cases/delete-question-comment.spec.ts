@@ -3,14 +3,19 @@ import { InMemoryQuestionCommentsRepository } from "test/repositories/in-memory-
 import { DeleteQuestionCommentUseCase } from "./delete-question-comment.js";
 import { makeQuestionComment } from "test/factories/make-question-comment.js";
 import { NotAllowedError } from "./errors/not-allowed-error.js";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository.js";
+import { UniqueEntityId } from "@/core/entities/unique-entity-id.js";
 
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository;
 let sut: DeleteQuestionCommentUseCase;
 
 describe("Delete Question Comment", () => {
   beforeEach(() => {
-    inMemoryQuestionCommentsRepository =
-      new InMemoryQuestionCommentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryQuestionCommentsRepository = new InMemoryQuestionCommentsRepository(
+      inMemoryStudentsRepository,
+    );
 
     sut = new DeleteQuestionCommentUseCase(inMemoryQuestionCommentsRepository);
   });
@@ -30,7 +35,7 @@ describe("Delete Question Comment", () => {
 
   it("should not be able to delete a question comment from another user", async () => {
     const questionComment = makeQuestionComment({
-      authorId: "author-1",
+      authorId: new UniqueEntityId("author-1"),
     });
 
     await inMemoryQuestionCommentsRepository.create(questionComment);

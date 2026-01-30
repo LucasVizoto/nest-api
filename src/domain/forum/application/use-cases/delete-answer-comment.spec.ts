@@ -3,13 +3,19 @@ import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-an
 import { DeleteAnswerCommentUseCase } from "./delete-answer-comment.js";
 import { makeAnswerComment } from "test/factories/make-answer-comment.js";
 import { NotAllowedError } from "./errors/not-allowed-error.js";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository.js";
+import { UniqueEntityId } from "@/core/entities/unique-entity-id.js";
 
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository;
 let sut: DeleteAnswerCommentUseCase;
 
 describe("Delete Answer Comment", () => {
   beforeEach(() => {
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository,
+    );
 
     sut = new DeleteAnswerCommentUseCase(inMemoryAnswerCommentsRepository);
   });
@@ -29,7 +35,7 @@ describe("Delete Answer Comment", () => {
 
   it("should not be able to delete a answer comment from another user", async () => {
     const answerComment = makeAnswerComment({
-      authorId: "author-1",
+      authorId: new UniqueEntityId("author-1"),
     });
 
     await inMemoryAnswerCommentsRepository.create(answerComment);

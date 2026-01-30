@@ -4,15 +4,20 @@ import { CommentOnAnswerUseCase } from "./comment-on-answer.js";
 import { InMemoryAnswersRepository } from "test/repositories/in-memory-answers-repository.js";
 import { InMemoryAnswerCommentsRepository } from "test/repositories/in-memory-answer-comments-repository.js";
 import { InMemoryAnswerAttachmentsRepository } from "test/repositories/in-memory-answer-attachments-repository.js";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository.js";
 
 let inMemoryAnswerCommentsRepository: InMemoryAnswerCommentsRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
 let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
 let sut: CommentOnAnswerUseCase;
 
 describe("Comment on Answer", () => {
   beforeEach(() => {
-    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryAnswerCommentsRepository = new InMemoryAnswerCommentsRepository(
+      inMemoryStudentsRepository,
+    );
     inMemoryAnswerAttachmentRepository =
       new InMemoryAnswerAttachmentsRepository();
     inMemoryAnswersRepository = new InMemoryAnswersRepository(
