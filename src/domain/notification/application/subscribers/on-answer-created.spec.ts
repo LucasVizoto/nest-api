@@ -16,11 +16,15 @@ import { SendNotificationUseCase } from "../use-cases/send-notification.js";
 import { InMemoryNotificationsRepository } from "test/repositories/in-memory-notifications-repository.js";
 import { makeQuestion } from "test/factories/make-question.js";
 import { waitFor } from "test/utils/wait-fot.js";
+import { InMemoryStudentsRepository } from "test/repositories/in-memory-students-repository.js";
+import { InMemoryAttachmentsRepository } from "test/repositories/in-memory-attachments-repository.js";
 
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository;
 let inMemoryAnswerAttachmentRepository: InMemoryAnswerAttachmentsRepository;
 let inMemoryAnswersRepository: InMemoryAnswersRepository;
+let inMemoryStudentsRepository: InMemoryStudentsRepository;
+let inMemoryAttachmentsRepository: InMemoryAttachmentsRepository;
 
 let inMemoryNotificationsRepository: InMemoryNotificationsRepository;
 let sendNotificationUseCase: SendNotificationUseCase;
@@ -31,8 +35,12 @@ describe("On Answer Created", () => {
   beforeEach(() => {
     inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentsRepository();
+    inMemoryStudentsRepository = new InMemoryStudentsRepository();
+    inMemoryAttachmentsRepository = new InMemoryAttachmentsRepository();
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
       inMemoryQuestionAttachmentsRepository,
+      inMemoryAttachmentsRepository,
+      inMemoryStudentsRepository,
     );
     inMemoryAnswerAttachmentRepository =
       new InMemoryAnswerAttachmentsRepository();
