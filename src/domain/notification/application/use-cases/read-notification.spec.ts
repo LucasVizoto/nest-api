@@ -20,7 +20,7 @@ describe("Read Notification", () => {
     await inMemoryNotificationsRepository.create(notification);
 
     const result = await sut.execute({
-      recipientId: notification.recipentId.toString(),
+      recipientId: notification.recipientId.toString(),
       notificationId: notification.id.toString(),
     });
 
